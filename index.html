@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Social Constructivism: Origins</title>
+<style>
+  :root {
+    --bg: #efe4cc;            /* aged parchment */
+    --bg-deep: #e6d7b6;
+    --surface: #f8f1de;       /* old paper */
+    --surface-2: #f3ead1;
+    --text: #3a2e1f;          /* ink brown */
+    --muted: #7a6a55;         /* faded ink */
+    --border: #cdbf9f;        /* aged edge */
+    --accent: #1a6b6a;        /* deep teal */
+    --accent-soft: #c5ddd9;
+    --accent-2: #b85c1a;      /* burnt sienna */
+    --accent-2-soft: #f0d4b0;
+    --gold: #a8843b;          /* aged gold */
+    --focus: #1a6b6a;
+    --shadow: 0 6px 22px rgba(58, 46, 31, 0.12);
+    --radius: 12px;
+    --transition: 0.25s ease;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,0.35), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(168,132,59,0.10), transparent 50%),
+      repeating-linear-gradient(45deg, rgba(122,106,85,0.025) 0 2px, transparent 2px 6px);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Layout ---------- */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    letter-spacing: 0.3px;
+  }
+
+  header .subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .lang-toggle {
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    margin-top: 14px;
+  }
+
+  .lang-toggle button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  .lang-toggle button.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .lang-toggle button:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Stage legend ---------- */
+  .legend {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot.dev { background: var(--accent); }
+  .dot.dis { background: var(--accent-2); }
+
+  /* ---------- Timeline (horizontal, desktop) ---------- */
+  .timeline-wrap {
+    position: relative;
+    background-color: var(--surface);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(168,132,59,0.08), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(26,107,106,0.06), transparent 45%),
+      repeating-linear-gradient(45deg, rgba(122,106,85,0.03) 0 2px, transparent 2px 7px);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,0.4);
+    border-radius: var(--radius);
+    padding: 40px 24px 30px;
+    margin-bottom: 24px;
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  /* horizontal connecting line */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: 28px;
+    right: 28px;
+    height: 4px;
+    background: linear-gradient(
+      to right,
+      var(--accent) 0%,
+      var(--accent) 80%,
+      var(--accent-2) 80%,
+      var(--accent-2) 100%
+    );
+    border-radius: 2px;
+    z-index: 0;
+    box-shadow: 0 1px 2px rgba(58, 46, 31, 0.15);
+  }
+
+  .timeline li {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    padding: 0 4px;
+    text-align: center;
+  }
+
+  .node {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--gold);
+    background: var(--surface);
+    box-shadow: 0 2px 6px rgba(58, 46, 31, 0.25);
+    transition: transform var(--transition), border-color var(--transition),
+      box-shadow var(--transition), filter var(--transition);
+    margin-bottom: 10px;
+  }
+
+  .node svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: sepia(0.28) contrast(0.96) brightness(0.98);
+  }
+
+  .timeline li.dev .node { border-color: var(--gold); }
+  .timeline li.dis .node { border-color: var(--gold); }
+
+  .timeline li.selected .node {
+    border-color: var(--accent);
+    transform: scale(1.22);
+    box-shadow: 0 0 0 5px var(--accent-soft), 0 3px 12px rgba(58, 46, 31, 0.28);
+  }
+
+  .timeline li.dis.selected .node {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 5px var(--accent-2-soft), 0 3px 12px rgba(58, 46, 31, 0.28);
+  }
+
+  .milestone-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .year {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .milestone-title {
+    font-size: 0.8rem;
+    color: var(--muted);
+    max-width: 120px;
+  }
+
+  .timeline li:hover .milestone-title { color: var(--text); }
+
+  /* ---------- Footprint trail (first-person walk through history) ---------- */
+  .footprints-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .footprint {
+    position: absolute;
+    width: 18px;
+    height: 24px;
+    transform: scale(var(--s, 1));
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  .footprint svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transform: rotate(var(--rot, 0deg));
+    transform-origin: center;
+  }
+
+  .footprint.walked { opacity: 0.6; }
+  .footprint.walked .fp-shape { fill: var(--accent); }
+  .footprint.walked.dis .fp-shape { fill: var(--accent-2); }
+
+  .footprint.ghost { opacity: 0.16; }
+  .footprint.ghost .fp-shape {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.3;
+  }
+
+  .footprint.current-step {
+    opacity: 1;
+    animation: stepPulse 1.8s ease-in-out infinite;
+  }
+  .footprint.current-step .fp-shape { fill: var(--accent); }
+  .footprint.current-step.dis .fp-shape { fill: var(--accent-2); }
+
+  @keyframes stepPulse {
+    0%, 100% { transform: scale(var(--s, 1)); }
+    50% { transform: scale(calc(var(--s, 1) * 1.22)); }
+  }
+
+  /* ---------- Details card ---------- */
+  .details {
+    background-color: var(--surface);
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(168,132,59,0.08), transparent 35%),
+      repeating-linear-gradient(0deg, rgba(122,106,85,0.02) 0 1px, transparent 1px 4px);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--accent);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    min-height: 180px;
+    transition: border-color var(--transition);
+  }
+
+  .details.stage-dissemination {
+    border-left-color: var(--accent-2);
+  }
+
+  .details .stage-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+
+  .stage-tag.dev {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .stage-tag.dis {
+    background: var(--accent-2-soft);
+    color: var(--accent-2);
+  }
+
+  .details h2 {
+    margin: 4px 0 6px;
+    font-size: 1.5rem;
+  }
+
+  .details .year-line {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .details p {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  /* ---------- Navigation ---------- */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background var(--transition), border-color var(--transition),
+      color var(--transition);
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.reset {
+    margin-left: auto;
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .nav-btn.reset:hover {
+    background: #0b6564;
+    color: #fff;
+  }
+
+  /* ---------- Summary card ---------- */
+  .summary {
+    background-color: var(--surface-2);
+    background-image:
+      radial-gradient(circle at 100% 100%, rgba(26,107,106,0.07), transparent 40%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .summary blockquote {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    border-left: 4px solid var(--accent);
+    padding-left: 16px;
+  }
+
+  .concepts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .concept {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .concept .icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 8px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .concept h3 {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Footer note ---------- */
+  .note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 12px;
+  }
+
+  /* ---------- Responsive: vertical timeline on mobile ---------- */
+  @media (max-width: 720px) {
+    .timeline-wrap { padding: 16px; }
+
+    .timeline {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+    }
+
+    .timeline::before {
+      top: 8px;
+      bottom: 8px;
+      left: 28px;
+      right: auto;
+      width: 4px;
+      height: auto;
+      background: linear-gradient(
+        to bottom,
+        var(--accent) 0%,
+        var(--accent) 80%,
+        var(--accent-2) 80%,
+        var(--accent-2) 100%
+      );
+    }
+
+    .timeline li {
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 14px;
+      padding: 10px 6px;
+    }
+
+    .node {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .milestone-meta {
+      align-items: flex-start;
+    }
+
+    .milestone-title { max-width: none; }
+
+    .concepts { grid-template-columns: 1fr; }
+
+    .nav-bar { gap: 8px; }
+    .nav-btn.reset { margin-left: 0; width: 100%; order: 3; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Subtle fade-in for detail panel */
+  .details {
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1 data-i18n="pageTitle">Social Constructivism: Origins</h1>
+    <p class="subtitle" data-i18n="pageSubtitle">The development and later spread of Vygotsky's ideas</p>
+
+    <div class="lang-toggle" role="group" aria-label="Language selector">
+      <button id="btn-en" class="active" type="button" aria-pressed="true">EN</button>
+      <button id="btn-zh" type="button" aria-pressed="false">中文</button>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span><span class="dot dev" aria-hidden="true"></span><span data-i18n="stageDevelopment">Development of ideas</span></span>
+    <span><span class="dot dis" aria-hidden="true"></span><span data-i18n="stageDissemination">Wider dissemination</span></span>
+  </div>
+
+  <section class="timeline-wrap" aria-label="Timeline of Vygotsky's ideas">
+    <div class="footprints-layer" id="footprints-layer" aria-hidden="true"></div>
+    <ul class="timeline" id="timeline" role="list"></ul>
+  </section>
+
+  <section class="details" id="details" aria-live="polite" aria-label="Selected milestone details"></section>
+
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev" type="button" aria-label="Previous milestone">
+      <span aria-hidden="true">‹</span><span data-i18n="prev">Previous</span>
+    </button>
+    <button class="nav-btn reset" id="reset" type="button" aria-label="Reset to first milestone">
+      <span aria-hidden="true">↺</span><span data-i18n="reset">Reset / 重新开始</span>
+    </button>
+    <button class="nav-btn" id="next" type="button" aria-label="Next milestone">
+      <span data-i18n="next">Next</span><span aria-hidden="true">›</span>
+    </button>
+  </div>
+
+  <section class="summary" aria-label="Summary">
+    <blockquote data-i18n="summaryQuote">Vygotsky is a foundational thinker for social constructivist approaches to learning—not the sole inventor of one fully unified theory.</blockquote>
+
+    <div class="concepts">
+      <div class="concept">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15 20c0-2.5 1.8-4.5 4-4.5"/></svg>
+        </div>
+        <h3 data-i18n="conceptInteraction">Social interaction</h3>
+      </div>
+      <div class="concept">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><path d="M21 4v5h-5"/><path d="M8 12h8M8 9h5M8 15h6"/></svg>
+        </div>
+        <h3 data-i18n="conceptLanguage">Language and culture</h3>
+      </div>
+      <div class="concept">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2 4.5V16a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.5c1-1 2-2.5 2-4.5a6 6 0 0 0-6-6z"/><path d="M9 21h6"/></svg>
+        </div>
+        <h3 data-i18n="conceptInternalisation">Internalisation</h3>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" data-i18n="footerNote">Classroom presentation resource — content for educational discussion; verify citations before formal use.</p>
+</div>
+
+<script>
+  // ---------- Content (bilingual) ----------
+  const milestones = [
+    {
+      year: { en: "Early 1920s", zh: "1920年代初" },
+      title: { en: "The problem", zh: "问题的提出" },
+      stage: "dev",
+      desc: {
+        en: "Some psychological explanations of the time focused mainly on observable behaviour or treated psychological development as an isolated individual process. Vygotsky sought a perspective that could explain the development of children's thinking and higher mental functions in its social and cultural context. Adams (2006) similarly reminds us that constructivism is not one unified theory, but a family of related perspectives.",
+        zh: "当时一些心理学解释主要关注可观察的行为，或将心理发展视为孤立的个体过程。维果茨基寻求一种能够在社会与文化背景中解释儿童思维与高级心理机能发展的视角。Adams（2006）同样提醒我们，建构主义并非一种统一的理论，而是一组相互关联的视角。"
+      }
+    },
+    {
+      year: { en: "1924", zh: "1924" },
+      title: { en: "A turning point", zh: "转折点" },
+      stage: "dev",
+      desc: {
+        en: "Vygotsky began working systematically in the Moscow psychological research community. This was an important turning point in the development of his ideas, but it was not the \"official founding year\" of social constructivism.",
+        zh: "维果茨基开始在莫斯科心理学研究界系统地开展工作。这是他思想发展中的一个重要转折点，但并非社会建构主义的“官方创立年份”。"
+      }
+    },
+    {
+      year: { en: "1926–1927", zh: "1926–1927" },
+      title: { en: "Rethinking psychology", zh: "重新思考心理学" },
+      stage: "dev",
+      desc: {
+        en: "Vygotsky reflected on problems in the theories and methods of psychology, including the lack of a shared framework among the different approaches at the time.",
+        zh: "维果茨基反思了心理学理论与方法中的问题，包括当时不同流派之间缺乏共同框架的状况。"
+      }
+    },
+    {
+      year: { en: "1929–1931", zh: "1929–1931" },
+      title: { en: "Social and cultural development", zh: "社会与文化发展" },
+      stage: "dev",
+      desc: {
+        en: "His ideas developed further into a cultural-historical perspective. This approach emphasised that higher mental functions should be understood in relation to social interaction, language, symbols, and cultural experience.",
+        zh: "他的思想进一步发展为一种文化—历史视角。这一取向强调，高级心理机能应结合社会互动、语言、符号与文化经验来理解。"
+      }
+    },
+    {
+      year: { en: "1934", zh: "1934" },
+      title: { en: "Thought and Speech", zh: "思维与言语" },
+      stage: "dev",
+      desc: {
+        en: "Thought and Speech was published in 1934, the same year Vygotsky died. He therefore did not complete a closed, unified theoretical system.",
+        zh: "《思维与言语》于1934年出版，同年维果茨基去世。因此他未能完成一个封闭、统一的理论体系。"
+      }
+    },
+    {
+      year: { en: "1960s–1970s", zh: "1960s–1970s" },
+      title: { en: "Wider influence", zh: "更广泛的影响" },
+      stage: "dis",
+      desc: {
+        en: "English translations and edited collections helped spread Vygotsky's ideas more widely during the 1960s and 1970s. This was a period of wider influence, not the original formation of the ideas.",
+        zh: "英文译本与编辑文集在1960年代至1970年代帮助维果茨基的思想得到更广泛的传播。这是一个影响扩大的时期，而非思想最初形成的时期。"
+      }
+    }
+  ];
+
+  const ui = {
+    pageTitle: { en: "Social Constructivism: Origins", zh: "社会建构主义：思想溯源" },
+    pageSubtitle: {
+      en: "The development and later spread of Vygotsky's ideas",
+      zh: "维果茨基思想的发展及其后来的传播"
+    },
+    stageDevelopment: { en: "Development of ideas", zh: "思想发展阶段" },
+    stageDissemination: { en: "Wider dissemination", zh: "广泛传播阶段" },
+    prev: { en: "Previous", zh: "上一个" },
+    next: { en: "Next", zh: "下一个" },
+    reset: { en: "Reset / 重新开始", zh: "重置 / 重新开始" },
+    summaryQuote: {
+      en: "Vygotsky is a foundational thinker for social constructivist approaches to learning—not the sole inventor of one fully unified theory.",
+      zh: "维果茨基是社会建构主义学习取向的奠基性思想家——但并非某一完全统一理论的唯一发明者。"
+    },
+    conceptInteraction: { en: "Social interaction", zh: "社会互动" },
+    conceptLanguage: { en: "Language and culture", zh: "语言与文化" },
+    conceptInternalisation: { en: "Internalisation", zh: "内化" },
+    footerNote: {
+      en: "Classroom presentation resource — content for educational discussion; verify citations before formal use.",
+      zh: "课堂演示资料——内容供教学讨论使用；正式使用前请核实引用来源。"
+    },
+    stageLabelDev: { en: "Development", zh: "发展阶段" },
+    stageLabelDis: { en: "Dissemination", zh: "传播阶段" }
+  };
+
+  // ---------- State ----------
+  let current = 0;
+  let lang = "en";
+
+  // Stylised engraved portrait of Lev Vygotsky (inline SVG, no external request).
+  const PORTRAIT_SVG =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" preserveAspectRatio="xMidYMid slice">' +
+    '<rect width="100" height="120" fill="#f3ead1"/>' +
+    '<ellipse cx="50" cy="52" rx="26" ry="30" fill="#e8d9b8" stroke="#5a4632" stroke-width="1.5"/>' +
+    '<path d="M24 46 C24 28, 76 28, 76 46 C76 40, 70 36, 64 36 C62 30, 40 30, 36 36 C30 36, 24 40, 24 46 Z" fill="#3a2e1f"/>' +
+    '<ellipse cx="25" cy="54" rx="3.5" ry="5" fill="#e8d9b8" stroke="#5a4632" stroke-width="1"/>' +
+    '<ellipse cx="75" cy="54" rx="3.5" ry="5" fill="#e8d9b8" stroke="#5a4632" stroke-width="1"/>' +
+    '<circle cx="40" cy="52" r="8" fill="none" stroke="#3a2e1f" stroke-width="1.8"/>' +
+    '<circle cx="60" cy="52" r="8" fill="none" stroke="#3a2e1f" stroke-width="1.8"/>' +
+    '<line x1="48" y1="52" x2="52" y2="52" stroke="#3a2e1f" stroke-width="1.8"/>' +
+    '<line x1="32" y1="50" x2="27" y2="48" stroke="#3a2e1f" stroke-width="1.5"/>' +
+    '<line x1="68" y1="50" x2="73" y2="48" stroke="#3a2e1f" stroke-width="1.5"/>' +
+    '<circle cx="40" cy="52" r="1.6" fill="#3a2e1f"/>' +
+    '<circle cx="60" cy="52" r="1.6" fill="#3a2e1f"/>' +
+    '<path d="M50 55 L48 64 L52 64 Z" fill="none" stroke="#5a4632" stroke-width="1.2"/>' +
+    '<path d="M44 70 Q50 73 56 70" fill="none" stroke="#5a4632" stroke-width="1.3" stroke-linecap="round"/>' +
+    '<path d="M22 110 L40 86 L50 96 L60 86 L78 110 Z" fill="#2f2620" stroke="#1a1410" stroke-width="1"/>' +
+    '<path d="M44 86 L50 96 L56 86 L58 110 L42 110 Z" fill="#f3ead1" stroke="#5a4632" stroke-width="0.8"/>' +
+    '<path d="M48 96 L50 110 L52 96 Z" fill="#6b3a1a"/>' +
+    '</svg>';
+  const PORTRAIT_URL = "data:image/svg+xml;utf8," + encodeURIComponent(PORTRAIT_SVG);
+
+  // ---------- Rendering ----------
+  const timelineEl = document.getElementById("timeline");
+  const detailsEl = document.getElementById("details");
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+  const resetBtn = document.getElementById("reset");
+  const btnEn = document.getElementById("btn-en");
+  const btnZh = document.getElementById("btn-zh");
+
+  function renderTimeline() {
+    timelineEl.innerHTML = "";
+    milestones.forEach((m, i) => {
+      const li = document.createElement("li");
+      li.className = m.stage === "dis" ? "dis" : "dev";
+      li.dataset.index = i;
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.setAttribute("aria-label", `${m.year[lang]} — ${m.title[lang]}`);
+      if (i === current) li.classList.add("selected");
+
+      li.innerHTML = `
+        <span class="node" aria-hidden="true">${PORTRAIT_SVG}</span>
+        <span class="milestone-meta">
+          <span class="year">${m.year[lang]}</span>
+          <span class="milestone-title">${m.title[lang]}</span>
+        </span>
+      `;
+
+      li.addEventListener("click", () => selectMilestone(i));
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectMilestone(i);
+        }
+      });
+
+      timelineEl.appendChild(li);
+    });
+  }
+
+  function renderFootprints() {
+    const layer = document.getElementById("footprints-layer");
+    const nodes = Array.from(document.querySelectorAll(".timeline .node"));
+    layer.innerHTML = "";
+    if (nodes.length < 2) return;
+
+    const layerRect = layer.getBoundingClientRect();
+    const n = nodes.length;
+    const perSegment = 3;
+
+    const pts = nodes.map((node) => {
+      const r = node.getBoundingClientRect();
+      return {
+        x: r.left + r.width / 2 - layerRect.left,
+        y: r.top + r.height / 2 - layerRect.top,
+      };
+    });
+
+    const svgMarkup =
+      '<svg viewBox="0 0 24 32" aria-hidden="true"><g class="fp-shape">' +
+      '<ellipse cx="12" cy="21" rx="6.5" ry="8.5"/>' +
+      '<circle cx="6.5" cy="9" r="2.1"/>' +
+      '<circle cx="9.5" cy="6" r="2.3"/>' +
+      '<circle cx="12" cy="5" r="2.4"/>' +
+      '<circle cx="14.5" cy="6" r="2.3"/>' +
+      '<circle cx="17.5" cy="9" r="2.1"/>' +
+      "</g></svg>";
+
+    for (let i = 0; i < n - 1; i++) {
+      const a = pts[i];
+      const b = pts[i + 1];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len;
+      const uy = dy / len;
+      const px = -uy;
+      const py = ux;
+      const angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
+      const endStage = milestones[i + 1].stage;
+
+      for (let k = 1; k <= perSegment; k++) {
+        const t = k / (perSegment + 1);
+        const cx = a.x + dx * t;
+        const cy = a.y + dy * t;
+        const side = k % 2 === 0 ? 1 : -1;
+        const off = 11;
+        const x = cx + px * off * side;
+        const y = cy + py * off * side;
+
+        const globalT = (i + t) / (n - 1);
+        const currentT = current / (n - 1);
+        const dist = Math.abs(globalT - currentT);
+        const scale = Math.max(0.6, 1 - dist * 0.5);
+
+        const fp = document.createElement("div");
+        fp.className = "footprint";
+        const walked = globalT <= currentT + 0.001;
+        fp.classList.add(walked ? "walked" : "ghost");
+        if (endStage === "dis") fp.classList.add("dis");
+
+        fp.style.left = x - 9 + "px";
+        fp.style.top = y - 12 + "px";
+        fp.style.setProperty("--rot", angleDeg + 90 + "deg");
+        fp.style.setProperty("--s", scale);
+        fp.innerHTML = svgMarkup;
+        layer.appendChild(fp);
+      }
+    }
+
+    // Place a "you are here" footprint at the current milestone node.
+    const here = pts[current];
+    const hereStage = milestones[current].stage;
+    let hereAngle;
+    if (current < n - 1) {
+      const a = pts[current];
+      const b = pts[current + 1];
+      hereAngle = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 90;
+    } else {
+      const a = pts[current - 1];
+      const b = pts[current];
+      hereAngle = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 90;
+    }
+    const hereFp = document.createElement("div");
+    hereFp.className = "footprint current-step";
+    if (hereStage === "dis") hereFp.classList.add("dis");
+    hereFp.style.left = here.x - 9 + "px";
+    hereFp.style.top = here.y - 12 + "px";
+    hereFp.style.setProperty("--rot", hereAngle + "deg");
+    hereFp.style.setProperty("--s", 1.05);
+    hereFp.innerHTML = svgMarkup;
+    layer.appendChild(hereFp);
+  }
+
+  function renderDetails() {
+    const m = milestones[current];
+    detailsEl.classList.remove("stage-dissemination");
+    if (m.stage === "dis") detailsEl.classList.add("stage-dissemination");
+
+    const tagLabel = m.stage === "dis" ? ui.stageLabelDis[lang] : ui.stageLabelDev[lang];
+    const tagClass = m.stage === "dis" ? "dis" : "dev";
+
+    // restart animation
+    detailsEl.style.animation = "none";
+    void detailsEl.offsetWidth;
+    detailsEl.style.animation = "";
+
+    detailsEl.innerHTML = `
+      <span class="stage-tag ${tagClass}">${tagLabel}</span>
+      <h2>${m.title[lang]}</h2>
+      <div class="year-line">${m.year[lang]}</div>
+      <p>${m.desc[lang]}</p>
+    `;
+  }
+
+  function renderUI() {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (ui[key]) el.textContent = ui[key][lang];
+    });
+    document.documentElement.lang = lang;
+    btnEn.classList.toggle("active", lang === "en");
+    btnZh.classList.toggle("active", lang === "zh");
+    btnEn.setAttribute("aria-pressed", lang === "en");
+    btnZh.setAttribute("aria-pressed", lang === "zh");
+  }
+
+  function updateNav() {
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === milestones.length - 1;
+  }
+
+  function selectMilestone(i) {
+    current = i;
+    renderTimeline();
+    renderFootprints();
+    renderDetails();
+    updateNav();
+  }
+
+  function setLanguage(l) {
+    lang = l;
+    renderUI();
+    renderTimeline();
+    renderFootprints();
+    renderDetails();
+    updateNav();
+  }
+
+  // ---------- Events ----------
+  prevBtn.addEventListener("click", () => {
+    if (current > 0) selectMilestone(current - 1);
+  });
+  nextBtn.addEventListener("click", () => {
+    if (current < milestones.length - 1) selectMilestone(current + 1);
+  });
+  resetBtn.addEventListener("click", () => selectMilestone(0));
+
+  btnEn.addEventListener("click", () => setLanguage("en"));
+  btnZh.addEventListener("click", () => setLanguage("zh"));
+
+  // Keyboard: arrow keys anywhere on the page navigate
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      if (current < milestones.length - 1) selectMilestone(current + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      if (current > 0) selectMilestone(current - 1);
+    } else if (e.key === "Home") {
+      selectMilestone(0);
+    } else if (e.key === "End") {
+      selectMilestone(milestones.length - 1);
+    }
+  });
+
+  // Reposition footprints when the layout reflows (responsive switch)
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderFootprints, 120);
+  });
+
+  // ---------- Init ----------
+  renderUI();
+  selectMilestone(0);
+</script>
+</body>
+</html>
